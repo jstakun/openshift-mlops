@@ -1,0 +1,23 @@
+﻿kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: object-detection-rest
+  labels:
+    app: object-detection-rest
+    app.kubernetes.io/component: object-detection-rest
+    app.kubernetes.io/instance: object-detection-rest
+    app.kubernetes.io/name: object-detection-rest
+    app.kubernetes.io/part-of: object-detection
+    app.openshift.io/runtime: python
+    app.openshift.io/runtime-version: 3.8-ubi8
+spec:
+  to:
+    kind: Service
+    name: object-detection-rest
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

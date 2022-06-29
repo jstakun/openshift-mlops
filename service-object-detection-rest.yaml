@@ -1,0 +1,31 @@
+﻿kind: Service
+apiVersion: v1
+metadata:
+  name: object-detection-rest
+  labels:
+    app: object-detection-rest
+    app.kubernetes.io/component: object-detection-rest
+    app.kubernetes.io/instance: object-detection-rest
+    app.kubernetes.io/name: object-detection-rest
+    app.kubernetes.io/part-of: object-detection
+    app.openshift.io/runtime: python
+    app.openshift.io/runtime-version: 3.8-ubi8
+  annotations:
+    app.openshift.io/vcs-ref: ''
+    app.openshift.io/vcs-uri: 'https://github.com/rh-aiservices-bu/object-detection-rest.git'
+    openshift.io/generated-by: OpenShiftWebConsole
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app: object-detection-rest
+    deploymentconfig: object-detection-rest

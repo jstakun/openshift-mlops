@@ -1,0 +1,64 @@
+﻿apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    openshift.io/installed-from: tektonhub
+    tekton.dev/categories: Security
+    tekton.dev/displayName: RedHat CodeReady Dependency Analysis
+    tekton.dev/pipelines.minVersion: 0.19.0
+    tekton.dev/platforms: linux/amd64
+    tekton.dev/tags: 'Security, Vulnenrability, CVE'
+  name: redhat-codeready-dependency-analysis
+  namespace: ml-models
+  labels:
+    app.kubernetes.io/version: '0.1'
+spec:
+  description: >-
+    The RedHat CodeReady Dependency Analysis task is an interface between Tekton
+    and Red Hat CodeReady Dependency Analytics platform. It provides
+    vulnerability and compliance analysis for your Python applications
+    dependencies, along with recommendations to address security vulnerabilities
+    and licensing issues.
+  params:
+    - default: requirements.txt
+      description: Path of target manifest file to perform analysis.
+      name: manifest-file-path
+      type: string
+    - default: redhat-codeready-dependency-analysis-report.json
+      description: Path of the file to save analysis report.
+      name: output-file-path
+      type: string
+    - default: site-package
+      description: 'Path of a directory in workspace, where dependencies are installed.'
+      name: pkg-installation-directory-path
+      type: string
+    - default: 'ghcr.io/fabric8-analytics/crda-python:3.7'
+      description: Image where CRDA CLI binary and required applications are installed.
+      name: image
+      type: string
+    - default: ''
+      description: 'The CRDA host, adjust this if you use an on premise environment.'
+      name: CRDA_HOST_URL
+      type: string
+  steps:
+    - env:
+        - name: CRDA_KEY
+          valueFrom:
+            secretKeyRef:
+              key: crda-key
+              name: crda
+        - name: HOST
+          value: $(params.CRDA_HOST_URL)
+      image: $(params.image)
+      name: redhat-codeready-dependency-analysis
+      resources: {}
+      script: |
+        #!/bin/sh
+        sh /crda.sh \
+        $(params.manifest-file-path) \
+        $(params.output-file-path) \
+        $(params.pkg-installation-directory-path)
+      workingDir: $(workspaces.output.path)
+  workspaces:
+    - description: Volume backing this workspace is used for input/output of the task.
+      name: output

@@ -1,0 +1,31 @@
+﻿apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: pre-task-setup
+spec:
+  params:
+    - name: file_url
+      type: string
+    - default: requirements.txt
+      name: manifest-file-path
+      type: string
+    - default: site-package
+      name: pkg-installation-directory-path
+      type: string
+    - default: 'ghcr.io/fabric8-analytics/crda-python:3.7'
+      name: image
+      type: string
+  steps:
+    - image: $(params.image)
+      name: pre-task-setup
+      resources: {}
+      script: |
+        #!/bin/sh
+
+        mkdir -p $(params.pkg-installation-directory-path)
+        #curl $(params.file_url) --output $(params.manifest-file-path)
+        pip3 install --target=$(params.pkg-installation-directory-path) \
+        -r $(params.manifest-file-path) --upgrade
+      workingDir: $(workspaces.output.path)
+  workspaces:
+    - name: output
