@@ -9,7 +9,6 @@ metadata:
     tekton.dev/platforms: linux/amd64
     tekton.dev/tags: 'Security, Vulnenrability, CVE'
   name: redhat-codeready-dependency-analysis
-  namespace: ml-models
   labels:
     app.kubernetes.io/version: '0.1'
 spec:
