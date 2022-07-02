@@ -7,7 +7,7 @@ spec:
     - default: object-detection-rest
       name: APP_NAME
       type: string
-    - default: 'https://github.com/rh-aiservices-bu/object-detection-rest.git'
+    - default: 'https://github.com/jstakun/object-detection-rest.git'
       name: GIT_REPO
       type: string
     - default: master
@@ -36,25 +36,6 @@ spec:
         name: git-clone
       workspaces:
         - name: output
-          workspace: workspace
-    - name: build
-      params:
-        - name: IMAGE
-          value: >-
-            image-registry.openshift-image-registry.svc:5000/ml-models/$(params.IMAGE_NAME)
-        - name: TLSVERIFY
-          value: 'false'
-        - name: PATH_CONTEXT
-          value: $(params.PATH_CONTEXT)
-        - name: VERSION
-          value: $(params.VERSION)
-      runAfter:
-        - redhat-codeready-dependency-analysis
-      taskRef:
-        kind: ClusterTask
-        name: s2i-python
-      workspaces:
-        - name: source
           workspace: workspace
     - name: deploy
       params:
@@ -141,7 +122,7 @@ spec:
       params:
         - name: srcImageURL
           value: >-
-            docker://image-registry.openshift-image-registry.svc:5000/ml-models/$(params.IMAGE_NAME)@$(tasks.build.results.IMAGE_DIGEST)
+            docker://image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.IMAGE_NAME)@$(tasks.build.results.IMAGE_DIGEST)
         - name: destImageURL
           value: 'docker://quay.io/jstakun/$(params.IMAGE_NAME)'
         - name: srcTLSverify
@@ -169,6 +150,37 @@ spec:
       taskRef:
         kind: Task
         name: cosign
+      workspaces:
+        - name: source
+          workspace: workspace
+    - name: build
+      params:
+        - name: IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.IMAGE_NAME)
+        - name: BUILDER_IMAGE
+          value: >-
+            registry.redhat.io/rhel8/buildah@sha256:23fb7971ea6ac4aaaaa1139473a602df0df19222a3b5a76b551b2b9ddd92e927
+        - name: STORAGE_DRIVER
+          value: vfs
+        - name: DOCKERFILE
+          value: ./Containerfile
+        - name: CONTEXT
+          value: .
+        - name: TLSVERIFY
+          value: 'true'
+        - name: FORMAT
+          value: oci
+        - name: BUILD_EXTRA_ARGS
+          value: >-
+            --build-arg
+            PIP_INDEX_URL=http://nexus.apps-infra.svc:8081/repository/pypi-proxy/simple/
+            --build-arg PIP_TRUSTED_HOST=nexus.apps-infra.svc
+      runAfter:
+        - redhat-codeready-dependency-analysis
+      taskRef:
+        kind: ClusterTask
+        name: buildah
       workspaces:
         - name: source
           workspace: workspace
