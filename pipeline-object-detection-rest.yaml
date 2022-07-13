@@ -42,117 +42,10 @@ spec:
         - name: SCRIPT
           value: oc rollout status deploy/$(params.APP_NAME)
       runAfter:
-        - stackrox-image-scan
-        - stackrox-image-check
-        - cosign
-      taskRef:
-        kind: ClusterTask
-        name: openshift-client
-    - name: redhat-codeready-dependency-analysis
-      params:
-        - name: manifest-file-path
-          value: requirements.txt
-        - name: output-file-path
-          value: redhat-codeready-dependency-analysis-report.json
-        - name: pkg-installation-directory-path
-          value: site-package
-        - name: image
-          value: 'ghcr.io/fabric8-analytics/crda-python:3.8'
-      runAfter:
-        - pre-task-setup
-      taskRef:
-        kind: Task
-        name: redhat-codeready-dependency-analysis
-      workspaces:
-        - name: output
-          workspace: workspace
-    - name: stackrox-image-scan
-      params:
-        - name: rox_central_endpoint
-          value: roxsecrets
-        - name: rox_api_token
-          value: roxsecrets
-        - name: image
-          value: >-
-            quay.io/jstakun/$(params.IMAGE_NAME)@$(tasks.build.results.IMAGE_DIGEST)
-        - name: output_format
-          value: table
-        - name: insecure-skip-tls-verify
-          value: 'true'
-      runAfter:
-        - skopeo-copy
-      taskRef:
-        kind: Task
-        name: stackrox-image-scan
-    - name: stackrox-image-check
-      params:
-        - name: rox_central_endpoint
-          value: roxsecrets
-        - name: rox_api_token
-          value: roxsecrets
-        - name: image
-          value: >-
-            quay.io/jstakun/$(params.IMAGE_NAME)@$(tasks.build.results.IMAGE_DIGEST)
-        - name: insecure-skip-tls-verify
-          value: 'true'
-      runAfter:
-        - skopeo-copy
-      taskRef:
-        kind: Task
-        name: stackrox-image-check
-    - name: pre-task-setup
-      params:
-        - name: file_url
-          value: 'file://requirements.txt'
-        - name: manifest-file-path
-          value: requirements.txt
-        - name: pkg-installation-directory-path
-          value: site-package
-        - name: image
-          value: 'ghcr.io/fabric8-analytics/crda-python:3.8'
-      runAfter:
-        - fetch-repository
-      taskRef:
-        kind: Task
-        name: pre-task-setup
-      workspaces:
-        - name: output
-          workspace: workspace
-    - name: skopeo-copy
-      params:
-        - name: srcImageURL
-          value: >-
-            docker://image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.IMAGE_NAME)@$(tasks.build.results.IMAGE_DIGEST)
-        - name: destImageURL
-          value: 'docker://quay.io/jstakun/$(params.IMAGE_NAME)'
-        - name: srcTLSverify
-          value: 'false'
-        - name: destTLSverify
-          value: 'true'
-      runAfter:
         - build
       taskRef:
         kind: ClusterTask
-        name: skopeo-copy
-      workspaces:
-        - name: images-url
-          workspace: workspace
-    - name: cosign
-      params:
-        - name: cosignkey
-          value: signing-secrets
-        - name: image
-          value: quay.io/jstakun/$(params.IMAGE_NAME)
-        - name: namespace
-          value: $(context.pipelineRun.namespace)
-      runAfter:
-        - skopeo-copy
-      taskRef:
-        kind: Task
-        name: cosign
-      workspaces:
-        - name: source
-          workspace: workspace
+        name: openshift-client
     - name: build
       params:
         - name: IMAGE
@@ -173,11 +66,10 @@ spec:
           value: oci
         - name: BUILD_EXTRA_ARGS
           value: >-
-            --build-arg
-            PIP_INDEX_URL=http://nexus.apps-infra.svc:8081/repository/pypi-proxy/simple/
-            --build-arg PIP_TRUSTED_HOST=nexus.apps-infra.svc
+            --build-arg PIP_INDEX_URL='' --build-arg
+            PIP_TRUSTED_HOST=nexus.apps-infra.svc
       runAfter:
-        - redhat-codeready-dependency-analysis
+        - fetch-repository
       taskRef:
         kind: ClusterTask
         name: buildah
