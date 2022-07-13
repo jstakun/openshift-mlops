@@ -7,14 +7,13 @@ spec:
     - default: object-detection-app
       name: APP_NAME
       type: string
-    - default: 'https://github.com/rh-aiservices-bu/object-detection-app.git'
+    - default: 'https://github.com/jstakun/object-detection-app.git'
       name: GIT_REPO
       type: string
     - default: master
       name: GIT_REVISION
       type: string
-    - default: >-
-        image-registry.openshift-image-registry.svc:5000/ml-models/object-detection-app
+    - default: object-detection-app
       name: IMAGE_NAME
       type: string
     - default: .
@@ -43,7 +42,8 @@ spec:
     - name: build
       params:
         - name: IMAGE
-          value: $(params.IMAGE_NAME)
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.IMAGE_NAME)
         - name: TLSVERIFY
           value: 'false'
         - name: PATH_CONTEXT
