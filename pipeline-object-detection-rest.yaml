@@ -40,7 +40,8 @@ spec:
     - name: deploy
       params:
         - name: SCRIPT
-          value: oc rollout status deploy/$(params.APP_NAME)
+          value: oc rollout restart deploy/$(params.APP_NAME);oc rollout status
+            deploy/$(params.APP_NAME) -w
       runAfter:
         - build
       taskRef:
