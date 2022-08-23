@@ -48,7 +48,7 @@ spec:
       taskRef:
         kind: ClusterTask
         name: openshift-client
-    - name: redhat-codeready-dependency-analysis
+    - name: sca-dependency-analysis
       params:
         - name: manifest-file-path
           value: requirements.txt
@@ -177,7 +177,7 @@ spec:
             PIP_INDEX_URL=http://nexus.apps-infra.svc:8081/repository/pypi-proxy/simple/
             --build-arg PIP_TRUSTED_HOST=nexus.apps-infra.svc
       runAfter:
-        - redhat-codeready-dependency-analysis
+        - sca-dependency-analysis
       taskRef:
         kind: ClusterTask
         name: buildah
