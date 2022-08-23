@@ -21,5 +21,7 @@ echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 2. Create stackrox secret
 3. Create cosign secret
 4. Create registry secret and bind it pipeline service account
-
+```
+oc patch serviceaccount pipeline -p '{"secrets": [{"name": "quay-creds"}]}'
+```
 
