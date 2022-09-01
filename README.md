@@ -5,7 +5,7 @@
 5. Go to object-detection-app url and take picture
 echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 
---- optional setup of proxy which persists all json requests and responses to mongodb database ---
+--- optional setup for proxy which persists all json requests and responses to mongodb database ---
 
 1. oc new-app --name mongodb docker.io/bitnami/mongodb:4.4
 2. oc new-app --name=dbapi -e QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017 -e QUARKUS_MONGODB_DATABASE=mlops quay.io/jstakun/camel-quarkus-mongodb-client:latest
@@ -20,7 +20,7 @@ echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 1. Create crda secret
 2. Create stackrox secret
 3. Create cosign secret
-4. Create registry secret and bind it pipeline service account
+4. Create registry secret and bind it to pipeline service account
 ```
 oc patch serviceaccount pipeline -p '{"secrets": [{"name": "quay-creds"}]}'
 ```
