@@ -16,6 +16,11 @@ echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 7. ROUTE=https://$(oc get route | grep dbapi | awk '{print $2}') && echo $ROUTE
 8. curl -v $ROUTE/camel/v1/cache/object-detection-log/10
 
+--- query logs ---
+
+curl -v $ROUTE/camel/v1/cache/object-detection-log/10 -X POST -H 'Content-type: text/plain' -d '$and: [{type: "response"}, {uid: "anonymous"}]'
+curl -v $ROUTE/camel/v1/cache/object-detection-log/10 -X POST -H 'Content-type: text/plain' -d 'type: "request"'
+
 --- optional secure pipeline setup ---
 
 1. Create crda secret
