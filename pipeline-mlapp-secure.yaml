@@ -108,6 +108,8 @@ spec:
           value: site-package
         - name: image
           value: 'ghcr.io/fabric8-analytics/crda-python:3.8'
+        - name: type
+          value: python
       runAfter:
         - fetch-repository
       taskRef:
