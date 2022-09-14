@@ -24,8 +24,14 @@ spec:
 
         mkdir -p $(params.pkg-installation-directory-path)
         #curl $(params.file_url) --output $(params.manifest-file-path)
-        pip3 install --target=$(params.pkg-installation-directory-path) \
-        -r $(params.manifest-file-path) --upgrade
+        if [ "$(params.type)" = "python" ]; then
+            pip3 install --target=$(params.pkg-installation-directory-path) \
+            -r $(params.manifest-file-path) --upgrade
+        elif [ "$(params.type)" = "nodejs" ]; then
+            npm install $(params.pkg-installation-directory-path)
+        else
+            echo "Invalid language " $(params.type)
+        fi                                                                                        
       workingDir: $(workspaces.output.path)
   workspaces:
     - name: output
