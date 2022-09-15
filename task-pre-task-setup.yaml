@@ -15,6 +15,9 @@ spec:
     - default: 'ghcr.io/fabric8-analytics/crda-python:3.7'
       name: image
       type: string
+    - default: python
+      type: string
+      name: type 
   steps:
     - image: $(params.image)
       name: pre-task-setup
