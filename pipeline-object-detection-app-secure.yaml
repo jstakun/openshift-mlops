@@ -49,7 +49,7 @@ spec:
         - name: VERSION
           value: $(params.VERSION)
       runAfter:
-        - redhat-codeready-dependency-analysis
+        - sca-dependency-analysis
       taskRef:
         kind: ClusterTask
         name: s2i-nodejs
@@ -86,7 +86,7 @@ spec:
       workspaces:
         - name: images-url
           workspace: workspace
-    - name: redhat-codeready-dependency-analysis
+    - name: sca-dependency-analysis
       params:
         - name: manifest-file-path
           value: package.json
