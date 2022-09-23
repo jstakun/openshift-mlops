@@ -18,8 +18,8 @@ echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 
 --- query logs ---
 
-1. curl -v $ROUTE/camel/v1/cache/object-detection-log/10 -X POST -H 'Content-type: text/plain' -d '$and: [{type: "response"}, {uid: "anonymous"}]'
-2. curl -v $ROUTE/camel/v1/cache/object-detection-log/10 -X POST -H 'Content-type: text/plain' -d 'type: "request"'
+1. curl --compress -k -v $ROUTE/camel/v1/cache/object-detection-log/10 -X POST -H 'Content-type: text/plain' -d '$and: [{type: "response"}, {uid: "anonymous"}]'
+2. curl --compress -k -v $ROUTE/camel/v1/cache/object-detection-log/10 -X POST -H 'Content-type: text/plain' -d 'type: "request"'
 
 --- optional secure pipeline setup ---
 
