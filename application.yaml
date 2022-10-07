@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mlapp
+  namespace: openshift-mlops
+spec:
+  project: mlapps
+
+  source:
+    repoURL: https://github.com/jstakun/openshift-mlops.git
+    targetRevision: HEAD
+    path: app
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops

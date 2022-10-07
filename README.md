@@ -1,8 +1,9 @@
-1. git clone https://github.com/jstakun/openshift-mlops.git
-2. oc new-project mlapps
-3. for f in *.yaml; do oc create -f $f; done
-4. Run object-detection-app and object-detection-rest pipelines
-5. Go to object-detection-app url and take picture
+1. git clone https://github.com/jstakun/openshift-mlops.git 
+2. cd app
+3. oc new-project mlapps
+4. for f in *.yaml; do oc create -f $f; done
+5. Run object-detection-app and object-detection-rest pipelines
+6. Go to object-detection-app url and take picture
 echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 
 --- optional setup for proxy which persists all json requests and responses to mongodb database ---
