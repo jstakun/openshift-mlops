@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mlapp
+  name: apps-mlapp
   namespace: openshift-gitops
 spec:
   project: mlapps
@@ -13,4 +13,4 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: openshift-mlops
+    namespace: mlapps
