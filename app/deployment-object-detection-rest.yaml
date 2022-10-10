@@ -1,14 +1,6 @@
 ﻿kind: Deployment
 apiVersion: apps/v1
 metadata:
-  annotations:
-    alpha.image.policy.openshift.io/resolve-names: '*'
-    app.openshift.io/vcs-ref: ''
-    app.openshift.io/vcs-uri: 'https://github.com/rh-aiservices-bu/object-detection-rest.git'
-    deployment.kubernetes.io/revision: '5'
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"object-detection-rest:latest","namespace":"ml-models"},"fieldPath":"spec.template.spec.containers[?(@.name==\"object-detection-rest\")].image","pause":"false"}]
-    openshift.io/generated-by: OpenShiftWebConsole
   name: object-detection-rest
   labels:
     app: object-detection-rest
@@ -17,7 +9,6 @@ metadata:
     app.kubernetes.io/name: object-detection-rest
     app.kubernetes.io/part-of: object-detection
     app.openshift.io/runtime: python
-    app.openshift.io/runtime-version: 3.8-ubi8
 spec:
   replicas: 1
   selector:
