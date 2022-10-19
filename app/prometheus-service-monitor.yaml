@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: object-detection-rest-prometheus-monitor
+  name: object-detection-rest-prometheus-monitor
+spec:
+  endpoints:
+    - interval: 5s
+      port: 8080-tcp
+      scheme: http
+      path: /metrics
+  selector:
+    matchLabels:
+     app: object-detection-rest
