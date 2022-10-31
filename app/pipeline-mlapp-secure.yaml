@@ -143,7 +143,7 @@ spec:
         - name: cosignkey
           value: signing-secrets
         - name: image
-          value: quay.io/jstakun/$(params.IMAGE_NAME)
+          value: quay.io/jstakun/$(params.IMAGE_NAME)@$(tasks.build-image.results.IMAGE_DIGEST)
         - name: namespace
           value: $(context.pipelineRun.namespace)
       runAfter:
