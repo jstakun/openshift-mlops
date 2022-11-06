@@ -1,0 +1,37 @@
+resources:
+- deployment-object-detection-app.yaml
+- deployment-object-detection-rest.yaml
+- namespace.yaml
+- persistentvolumeclaim-workspace.yaml
+- pipeline-mlapp-secure.yaml
+- pipeline-mlapp.yaml
+- pipeline-object-detection-app-secure.yaml
+- pipeline-object-detection-app.yaml
+- prometheus-service-monitor.yaml
+- rbac.yaml
+- route-object-detection-app.yaml
+- route-object-detection-rest.yaml
+- service-object-detection-app.yaml
+- service-object-detection-rest.yaml
+- task-cosign.yaml
+- task-pre-task-setup.yaml
+- task-redhat-codeready-dependency-analysis.yaml
+- task-stackrox-image-check.yaml
+- task-stackrox-image-scan.yaml
+
+secretGenerator:
+- name: roxsecrets
+  envs:
+  - environment.properties
+  options:
+    disableNameSuffixHash: true
+
+patchesJSON6902:
+- target:
+    version: v1
+    kind: ServiceAccount
+    name: pipeline
+  patch: |-
+    - op: add
+      path: /secrets/name/-
+      value: quay-creds
