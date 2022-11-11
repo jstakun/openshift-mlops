@@ -18,6 +18,7 @@ resources:
 - task-redhat-codeready-dependency-analysis.yaml
 - task-stackrox-image-check.yaml
 - task-stackrox-image-scan.yaml
+- sa-pipeline.yaml
 
 secretGenerator:
 - name: roxsecrets
@@ -25,13 +26,3 @@ secretGenerator:
   - environment.properties
   options:
     disableNameSuffixHash: true
-
-patchesJSON6902:
-- target:
-    version: v1
-    kind: ServiceAccount
-    name: pipeline
-  patch: |-
-    - op: add
-      path: /secrets/name/-
-      value: quay-creds
