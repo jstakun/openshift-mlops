@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: mlapps
+  name: apps-mlapps
   annotations:
     argocd.argoproj.io/sync: "true"
   labels:

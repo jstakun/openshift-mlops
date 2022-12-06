@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: object-detection-app
-          image: image-registry.openshift-image-registry.svc:5000/mlapps/object-detection-app:latest
+          image: image-registry.openshift-image-registry.svc:5000/apps-mlapps/object-detection-app:latest
           ports:
             - containerPort: 8080
               protocol: TCP
