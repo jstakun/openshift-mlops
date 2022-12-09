@@ -64,6 +64,7 @@ spec:
           value: oci
         - name: BUILD_EXTRA_ARGS
           value: >-
+            --squash      
             --build-arg PIP_INDEX_URL='' --build-arg
             PIP_TRUSTED_HOST=nexus.apps-infra.svc
       runAfter:
