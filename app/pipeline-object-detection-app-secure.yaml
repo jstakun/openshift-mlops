@@ -48,6 +48,8 @@ spec:
           value: $(params.PATH_CONTEXT)
         - name: VERSION
           value: $(params.VERSION)
+        - name: ENV_VARS
+          value: 'NPM_MIRROR=http://nexus.apps-infra.svc:8081/repository/npm-proxy/'
       runAfter:
         - sca-dependency-analysis
       taskRef:
