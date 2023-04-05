@@ -51,7 +51,7 @@ spec:
         - name: VERSION
           value: $(params.VERSION)
         - name: ENV_VARS
-          value: 'NPM_MIRROR=http://nexus.apps-infra.svc:8081/repository/npm-proxy/'
+          value: ['NPM_MIRROR=http://nexus.apps-infra.svc:8081/repository/npm-proxy/']
       runAfter:
         - fetch-repository
       taskRef:

@@ -1,6 +1,6 @@
 1. git clone https://github.com/jstakun/openshift-mlops.git 
 2. cd app
-3. oc new-project mlapps
+3. oc new-project apps-mlapps
 4. for f in *.yaml; do oc create -f $f; done
 5. Run object-detection-app and object-detection-rest pipelines
 6. Go to object-detection-app url and take picture
@@ -8,7 +8,7 @@ echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 
 --- optional setup for proxy which persists all json requests and responses to mongodb database ---
 
-1. oc new-app --name mongodb docker.io/bitnami/mongodb:4.4
+1. oc new-app --name mongodb docker.io/bitnami/mongodb:6.0
 2. oc set volume deployment/mongodb --add --name=db -m /bitnami/mongodb -t pvc --claim-size=1G --claim-name=mongodb --overwrite
 3. oc new-app --name=dbapi --labels=app=dbapi  -e QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017 -e QUARKUS_MONGODB_DATABASE=mlapps quay.io/jstakun/camel-quarkus-mongodb-client:latest
 4. oc patch deployment/dbapi --patch '{"spec":{"template":{"spec":{"serviceAccountName": "camel-leader-election"}}}}' 
