@@ -10,11 +10,12 @@ echo https://$(oc get route | grep object-detection-app | awk '{print $2}')
 
 1. oc new-app --name mongodb docker.io/bitnami/mongodb:6.0
 2. oc set volume deployment/mongodb --add --name=db -m /bitnami/mongodb -t pvc --claim-size=1G --claim-name=mongodb --overwrite
-3. oc new-app --name=dbapi --labels=app=dbapi  -e QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017 -e QUARKUS_MONGODB_DATABASE=mlapps quay.io/jstakun/camel-quarkus-mongodb-client:latest
+3. oc new-app --name=dbapi --labels=app=dbapi  -e QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017 -e QUARKUS_MONGODB_DATABASE=mlapps -e APP_NAMESPACE=apps-mlapps quay.io/jstakun/camel-quarkus-mongodb-client:latest
 4. oc patch deployment/dbapi --patch '{"spec":{"template":{"spec":{"serviceAccountName": "camel-leader-election"}}}}' 
 5. oc create route edge --service=dbapi
-6. oc new-app --name object-detection-proxy -e BACKEND_URL=http://object-detection-rest:8080/predictions -e LOGGER_URL=http://dbapi:8080/camel/v1/cache/object-detection-log quay.io/jstakun/json-proxy:latest 
+6. oc new-app --name object-detection-proxy -e BACKEND_URL=http://object-detection-rest:8080/predictions -e LOGGER_URL=http://dbapi:8080/camel/v1/cache/object-detection-log  quay.io/jstakun/json-proxy:latest 
 7. oc set env deployment/object-detection-app OBJECT_DETECTION_URL=http://object-detection-proxy:8080/predictions
+8. 
 8. ROUTE=https://$(oc get route | grep dbapi | awk '{print $2}') && echo $ROUTE
 9. curl -v $ROUTE/camel/v1/cache/object-detection-log/10
 
