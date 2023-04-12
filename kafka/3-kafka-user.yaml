@@ -1,0 +1,59 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: ai-user
+  namespace: apps-kafka
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    acls:
+      - host: '*'
+        operations:
+          - Describe
+          - Read
+          - Write
+        resource:
+          name: notebook-test
+          patternType: literal
+          type: topic
+      - host: '*'
+        operations:
+          - Describe
+          - Read
+          - Write
+        resource:
+          name: images
+          patternType: literal
+          type: topic
+      - host: '*'
+        operations:
+          - Describe
+          - Read
+          - Write
+        resource:
+          name: objects
+          patternType: literal
+          type: topic
+      - host: '*'
+        operations:
+          - Read
+        resource:
+          name: notebook-consumer
+          patternType: literal
+          type: group
+      - host: '*'
+        operations:
+          - Read
+        resource:
+          name: object-detection-consumer-group
+          patternType: literal
+          type: group
+      - host: '*'
+        operations:
+          - Read
+        resource:
+          name: odapp-objects-consumer
+          patternType: literal
+          type: group
+    type: simple

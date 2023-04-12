@@ -1,0 +1,40 @@
+piVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: ai-cluster
+  namespace: apps-kafka
+spec:
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+  kafka:
+    authorization:
+      type: simple
+    config:
+      default.replication.factor: 3
+      inter.broker.protocol.version: '3.3'
+      min.insync.replicas: 2
+      offsets.topic.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      transaction.state.log.replication.factor: 3
+    listeners:
+      - authentication:
+          type: scram-sha-512
+        name: plain
+        port: 9092
+        tls: false
+        type: internal
+      - authentication:
+          type: scram-sha-512
+        name: tls
+        port: 9093
+        tls: true
+        type: internal
+    replicas: 3
+    storage:
+      type: ephemeral
+    version: 3.3.1
+  zookeeper:
+    replicas: 3
+    storage:
+      type: ephemeral
