@@ -12,7 +12,7 @@ spec:
     - default: site-package
       name: pkg-installation-directory-path
       type: string
-    - default: 'ghcr.io/fabric8-analytics/crda-python:3.7'
+    - default: 'quay.io/jstakun/crda-python:3.8'
       name: image
       type: string
     - default: python
@@ -28,10 +28,10 @@ spec:
         mkdir -p $(params.pkg-installation-directory-path)
         #curl $(params.file_url) --output $(params.manifest-file-path)
         if [ "$(params.type)" = "python" ]; then
-            pip3 install --trusted-host=nexus.apps-infra.svc \ 
-            --index-url=http://nexus.apps-infra.svc:8081/repository/pypi-proxy/simple/ \
-            --target=$(params.pkg-installation-directory-path) \
-            -r $(params.manifest-file-path) --upgrade
+            pip3 --version
+            pip3 install -i http://nexus.apps-infra.svc:8081/repository/pypi-proxy/simple/ \
+            -t $(params.pkg-installation-directory-path) -r $(params.manifest-file-path) \
+            --trusted-host nexus.apps-infra.svc -vvv
         elif [ "$(params.type)" = "nodejs" ]; then
             npm set registry http://nexus.apps-infra.svc:8081/repository/npm-proxy/
             npm install $(params.pkg-installation-directory-path)
