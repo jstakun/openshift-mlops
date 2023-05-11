@@ -1,4 +1,4 @@
-piVersion: kafka.strimzi.io/v1beta2
+apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: ai-cluster
@@ -32,9 +32,13 @@ spec:
         type: internal
     replicas: 3
     storage:
-      type: ephemeral
+      deleteClaim: true
+      size: 2Gi
+      type: persistent-claim
     version: 3.3.1
   zookeeper:
     replicas: 3
     storage:
-      type: ephemeral
+      deleteClaim: true
+      size: 1Gi
+      type: persistent-claim
