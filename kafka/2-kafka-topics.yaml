@@ -4,6 +4,8 @@ kind: KafkaTopic
 metadata:
   name: notebook-test
   namespace: apps-kafka
+  labels:
+    strimzi.io/cluster: ai-cluster
 spec:
   config:
     retention.ms: 3600000
@@ -16,6 +18,8 @@ kind: KafkaTopic
 metadata:
   name: objects
   namespace: apps-kafka
+  labels:
+    strimzi.io/cluster: ai-cluster  
 spec:
   config:
     retention.ms: 3600000
@@ -28,6 +32,8 @@ kind: KafkaTopic
 metadata:
   name: images
   namespace: apps-kafka
+  labels:
+    strimzi.io/cluster: ai-cluster  
 spec:
   config:
     retention.ms: 604800000

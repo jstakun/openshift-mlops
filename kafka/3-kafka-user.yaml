@@ -3,6 +3,8 @@ kind: KafkaUser
 metadata:
   name: ai-user
   namespace: apps-kafka
+  labels:
+    strimzi.io/cluster: ai-cluster
 spec:
   authentication:
     type: scram-sha-512
