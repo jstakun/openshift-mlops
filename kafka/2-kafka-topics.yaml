@@ -36,7 +36,7 @@ metadata:
     strimzi.io/cluster: ai-cluster  
 spec:
   config:
-    retention.ms: 604800000
-    segment.bytes: 1073741824
+    retention.ms: 3600000
+    segment.bytes: 1048576
   partitions: 1
   replicas: 3
