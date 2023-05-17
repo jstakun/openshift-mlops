@@ -17,6 +17,8 @@ spec:
       offsets.topic.replication.factor: 3
       transaction.state.log.min.isr: 2
       transaction.state.log.replication.factor: 3
+      log.segment.delete.delay.ms: 60000
+      log.retention.check.interval.ms: 300000
     listeners:
       - authentication:
           type: scram-sha-512
